@@ -17,6 +17,15 @@ class EmergenciesController < ApplicationController
     render json: msg
   end
 
+  def responders
+    all_responders = {}
+    Responder.all.group_by(&:category).map{|type, data| all_responders[type] = data.count }
+    available_responders = Responder.where(available: true).count
+    on_duty_responders = Responder.where(on_duty: true).count
+    on_duty_n_available_responders = Responder.where(available: true, on_duty: true).count
+    render json: { all_responder: all_responders, available_responder: available_responders, on_duty_responder: on_duty_responders, on_duty_n_available_responder: on_duty_n_available_responders }
+  end
+
   private
     def set_emergency
       @emergency = Emergency.find(params[:id])
