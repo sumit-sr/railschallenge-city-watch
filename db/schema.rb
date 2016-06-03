@@ -14,9 +14,9 @@
 ActiveRecord::Schema.define(version: 20160603052954) do
 
   create_table "emergencies", force: :cascade do |t|
-    t.string   "type"
+    t.string   "category"
     t.text     "description"
-    t.integer  "quantity"
+    t.integer  "no_of_van"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end

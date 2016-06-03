@@ -3,50 +3,18 @@ class EmergenciesController < ApplicationController
 
   def index
     @emergencies = Emergency.all
-  end
-
-  def show
-  end
-
-  def new
-    @emergency = Emergency.new
-  end
-
-  def edit
+    render json: @emergencies
   end
 
   def create
     @emergency = Emergency.new(emergency_params)
-
-    respond_to do |format|
-      if @emergency.save
-        format.html { redirect_to @emergency, notice: 'Emergency was successfully created.' }
-        format.json { render :show, status: :created, location: @emergency }
-      else
-        format.html { render :new }
-        format.json { render json: @emergency.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  def update
-    respond_to do |format|
-      if @emergency.update(emergency_params)
-        format.html { redirect_to @emergency, notice: 'Emergency was successfully updated.' }
-        format.json { render :show, status: :ok, location: @emergency }
-      else
-        format.html { render :edit }
-        format.json { render json: @emergency.errors, status: :unprocessable_entity }
-      end
-    end
+    msg = @emergency.save ? 'Emergency was successfully created.' : 'Unsuccessfull!'
+    render json: msg
   end
 
   def destroy
-    @emergency.destroy
-    respond_to do |format|
-      format.html { redirect_to emergencies_url, notice: 'Emergency was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    msg = @emergency.destroy ? 'Responder was successfully destroyed.' : 'Unsuccessfull!'
+    render json: msg
   end
 
   private
@@ -55,6 +23,6 @@ class EmergenciesController < ApplicationController
     end
 
     def emergency_params
-      params[:emergency]
+      params.require(:emergency).permit(:category, :description, :no_of_van)
     end
 end
