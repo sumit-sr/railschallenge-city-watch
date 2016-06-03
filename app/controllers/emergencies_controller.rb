@@ -1,4 +1,5 @@
 class EmergenciesController < ApplicationController
+  include EmergenciesHelper
   before_action :set_emergency, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -9,7 +10,8 @@ class EmergenciesController < ApplicationController
   def create
     @emergency = Emergency.new(emergency_params)
     msg = @emergency.save ? 'Emergency was successfully created.' : 'Unsuccessfull!'
-    render json: msg
+    responder = dispach_for_emergency
+    render json: { msg: msg, responder: responder }
   end
 
   def destroy
